@@ -1,4 +1,4 @@
-const { deepCloneSerialize, deepCloneRecursive } = require("./deepClone")
+const { deepCloneSerialize, deepCloneRecursive } = require("./deep_clone")
 
 function getObject () {
     let paddy = {name: 'Paddy', address: {town: 'Lerum', country: 'Sweden'}};

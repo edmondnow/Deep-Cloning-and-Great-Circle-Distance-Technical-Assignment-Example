@@ -1,4 +1,3 @@
-let partners = require("./partners.json");
 const {
     formatPartners,
     calculateCentralAngle,
@@ -10,7 +9,7 @@ const {
     filterPartners,
     formatNearbyPartners,
     EARTH_RADIUS_KM,
-} = require("./getNearbyOffices");
+} = require("./get_nearby_offices");
 
 
 describe.only("test getNearbyOffices", () => {
