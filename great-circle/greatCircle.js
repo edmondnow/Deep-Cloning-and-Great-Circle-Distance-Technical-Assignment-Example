@@ -14,26 +14,26 @@ const degreesToRadians = (degrees) => degrees * (Math.PI / 180);
 
 const parseCoords = coords => coords.split(",").map(str => parseFloat(str));
 
-const convertToRadians = coords => parseCoords(coords).map(degree => parseFloat(degreesToRadians(degree).toFixed(10)));
+const convertToRadians = degrees => parseFloat(degreesToRadians(degrees).toFixed(10));
 
-const getDistanceFromLondonKM = (centralAngle, meanEarthRadiusKM) => parseFloat((centralAngle * meanEarthRadiusKM).toFixed(2));
+const getDistanceFromLondonKM = (centralAngle, earthRadiusKM) => parseFloat((centralAngle * earthRadiusKM).toFixed(2));
 
 
-const calculateCentralAngle = (([lat1, long1], [lat2, long2]) => {  
+const calculateCentralAngle = ([lat1, long1], [lat2, long2]) => {  
     const { sin, cos, acos } = Math;
     const longAbsDiff = long1 > long2 ? long1 - long2 : long2 - long1;
     return acos((sin(lat1) * sin(lat2)) + (cos(lat1) * cos(lat2) * cos(longAbsDiff)));
-});
+};
 
-const enrichOffices = offs => offs.map(off => { 
-    const CENTRAL_LONDON_RADIANS = CENTRAL_LONDON_COORDS.map(coord => degreesToRadians(coord))
-    const radians = convertToRadians(off.coordinates)
+const enrichOffice = off => { 
+    const CENTRAL_LONDON_RADIANS = CENTRAL_LONDON_COORDS.map(coord => degreesToRadians(coord));
+    const radians = parseCoords(off.coordinates).map(degrees => convertToRadians(degrees));
     const centralAngle = calculateCentralAngle(radians, CENTRAL_LONDON_RADIANS);
-    const distanceFromLondonKM = getDistanceFromLondonKM(centralAngle, EARTH_RADIUS_KM)
-    return {address: off.address, distanceFromLondonKM}
-});
+    const distanceFromLondonKM = getDistanceFromLondonKM(centralAngle, EARTH_RADIUS_KM);
+    return { address: off.address, distanceFromLondonKM };
+};
 
-const formatPartners = (p) =>  p.map(p =>  ({name: p.organization, offices: enrichOffices(p.offices)}));
+const formatPartners = p => p.map(p => ({name: p.organization, offices: p.offices.map(off => enrichOffice(off))}));
 
 function getNearbyOffices(partners) {
     const nearbyOffices = formatPartners(partners).map(({ offices, ...rest}) => ({ ...rest, offices: filterOffices(offices) }));
@@ -41,11 +41,10 @@ function getNearbyOffices(partners) {
     return formatNearbyPartners(nearbyPartners);
 }
 
+getNearbyOffices(partners);;
 
 module.exports = {
-    getNearbyOffices,
     formatPartners,
-    enrichOffices,
     calculateCentralAngle,
     getDistanceFromLondonKM,
     convertToRadians, 
@@ -53,6 +52,7 @@ module.exports = {
     degreesToRadians,
     filterOffices,
     filterPartners,
-    formatNearbyPartners
+    formatNearbyPartners,
+    EARTH_RADIUS_KM
 };
 
