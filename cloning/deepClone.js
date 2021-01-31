@@ -12,7 +12,7 @@ function deepCloneRecursive(obj) {
     const keys = Object.keys(obj);
     
     if (obj.constructor !== Object)  {
-        throw "Paremeter not an Object"
+        throw "Parameter not an Object"
     }
 
     let clone = keys.reduce((acc, key) =>  {
