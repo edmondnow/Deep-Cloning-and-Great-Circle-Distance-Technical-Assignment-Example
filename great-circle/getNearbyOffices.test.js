@@ -10,7 +10,7 @@ const {
     filterPartners,
     formatNearbyPartners,
     EARTH_RADIUS_KM,
-} = require("./greatCircle");
+} = require("./getNearbyOffices");
 
 
 describe.only("test getNearbyOffices", () => {
