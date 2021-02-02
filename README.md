@@ -1,6 +1,6 @@
 # spidergap
-technical assignment
-Coding questions
+
+## Technical assignment
 
 Please submit your code as if you intended to ship it to production. The details matter. Code should be well written in simple, idiomatic code, and should be fully tested.
 
